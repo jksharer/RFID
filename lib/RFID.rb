@@ -23,15 +23,23 @@ module RFID
   #Fail if wrong version returned and go no further
   fail_if_wrong_version
 
+
   ###
-  #Library initialization and exit.  The nflib library itself must be
+  #Library initialization and exit.  The nfclib library itself must be
   #started up (and later shut down) prior to accessing any of the following
   #methods.
   #
-  #Input to these methods is optional in C, and may be used too attach
-  #the output to a different context.
-  #attach_function :nfc_init, [ :pointer ], :void
-  #attach_function :nfc_exit, [ :pointer ], :void
+  #NOTE:As far as I can tell, the methods in this library that require 
+  #passing in a nfc_context* pointer are not utilized. They are simply
+  #typecast to void and not utilized.  I have a suspicion that they 
+  #are in place for multithreading in later revisions, but frankly don't
+  #know.
+  #
+  #From a design standpoint, I am going to continue to include them in
+  #the wrapper, to keep the API interface from breaking later.  This means
+  #passing in a lot of nils from Ruby in those spots.  TODO: extract out
+  attach_function :nfc_init, [ :pointer ], :void       #RFID.nfc_init(nil)
+  attach_function :nfc_exit, [ :pointer ], :void       #RFID.nfc_exit(nil)
 
   ###
   #Error reporting methods.
